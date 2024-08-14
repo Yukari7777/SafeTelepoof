@@ -1,5 +1,5 @@
 name = "Safe Telepoof"
-version = "1.0"
+version = "1.0.1"
 description = "Stop wasting your lazy forager's durability!\n\nWhile holding lazy forager:\n- Right click + Left Click to telepoof\n- Right Click + Right Click to cancel"
 author = "Yukari7777"
 api_version = 10
@@ -18,7 +18,7 @@ priority = 0
 
 folder_name = folder_name or ""
 if folder_name:find("SafeTelepoof") then
-    name = name.." - Test"
+    name = name.." - local"
 end
 
 server_filter_tags = {
