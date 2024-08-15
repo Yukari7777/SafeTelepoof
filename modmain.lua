@@ -52,7 +52,10 @@ end
 AddComponentPostInit("playercontroller", function(self, inst)
 	local _DoAction = self.DoAction
 	self.DoAction = function(self, buffaction, ...)
-		if buffaction.action == ACTIONS.CASTAOE and (buffaction.invobject ~= nil and buffaction.invobject.prefab == "orangestaff") then
+		if buffaction.action == ACTIONS.CASTAOE 
+		and (buffaction.invobject ~= nil and buffaction.invobject.prefab == "orangestaff") 
+		and buffaction.pos ~= nil 
+		and buffaction.pos.local_pt ~= nil then
 			-- Convert CASTAOE to BLINK right before it sends to the server.
 			local invobject = buffaction.invobject
 			local platform, pos_x, pos_z = buffaction.pos.walkable_platform, buffaction.pos.local_pt.x, buffaction.pos.local_pt.z
@@ -62,11 +65,16 @@ AddComponentPostInit("playercontroller", function(self, inst)
 				SendRPCToServer(RPC.RightClick, ACTIONS.BLINK.code, pos_x, pos_z, mouseover, nil, nil, nil, nil, nil, platform, platform ~= nil)
 			elseif self:CanLocomote() and not self:IsBusy() then 
 				-- Lag compensation(movement prediction) is on
-				local act = BufferedAction(GLOBAL.ThePlayer, mouseover, ACTIONS.BLINK, invobject, Vector3(pos_x, 0, pos_z))
-				act.preview_cb = function() 
-					SendRPCToServer(RPC.RightClick, ACTIONS.BLINK.code, pos_x, pos_z, mouseover, nil, nil, nil, nil, nil, platform, platform ~= nil)
-				end
-				self.locomotor:PreviewAction(act, true)
+				self.locomotor:Stop()
+				self.inst:DoTaskInTime(0, function() 
+					--Delay one frame if we just sent movement prediction so that
+					--this RPC arrives a frame after the movement prediction 	
+					local act = BufferedAction(GLOBAL.ThePlayer, mouseover, ACTIONS.BLINK, invobject, Vector3(pos_x, 0, pos_z))
+					act.preview_cb = function() 
+						SendRPCToServer(RPC.RightClick, ACTIONS.BLINK.code, pos_x, pos_z, mouseover, nil, nil, nil, nil, nil, platform, platform ~= nil)
+					end
+					self.locomotor:PreviewAction(act, true)
+				end)
 			end
 		else 
 			_DoAction(self, buffaction, ...)
@@ -83,8 +91,7 @@ AddPrefabPostInit("orangestaff", function(inst)
 	inst:AddComponent("aoetargeting")
     inst.components.aoetargeting:SetAllowRiding(true)
     inst.components.aoetargeting.reticule.reticuleprefab = "reticule"
-    -- inst.components.aoetargeting.reticule.validcolour = { 1, .75, 0, 1 }
-    -- inst.components.aoetargeting.reticule.invalidcolour = { .5, 0, 0, 1 }
     inst.components.aoetargeting.reticule.ease = true
     inst.components.aoetargeting.reticule.mouseenabled = true
+	inst.components.aoetargeting:SetEnabled(false)
 end) 

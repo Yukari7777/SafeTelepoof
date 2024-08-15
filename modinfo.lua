@@ -1,5 +1,5 @@
 name = "Safe Telepoof"
-version = "1.1.0"
+version = "1.1.1"
 description = "Stop wasting your lazy explorer's durability!\n\nWhile holding lazy explorer:\n- Right click + Left Click to telepoof\n- Right Click + Right Click to cancel"
 author = "Yukari7777"
 api_version = 10
