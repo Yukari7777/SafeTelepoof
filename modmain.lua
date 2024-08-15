@@ -65,16 +65,11 @@ AddComponentPostInit("playercontroller", function(self, inst)
 				SendRPCToServer(RPC.RightClick, ACTIONS.BLINK.code, pos_x, pos_z, mouseover, nil, nil, nil, nil, nil, platform, platform ~= nil)
 			elseif self:CanLocomote() and not self:IsBusy() then 
 				-- Lag compensation(movement prediction) is on
-				self.locomotor:Stop()
-				self.inst:DoTaskInTime(0, function() 
-					--Delay one frame if we just sent movement prediction so that
-					--this RPC arrives a frame after the movement prediction 	
-					local act = BufferedAction(GLOBAL.ThePlayer, mouseover, ACTIONS.BLINK, invobject, Vector3(pos_x, 0, pos_z))
-					act.preview_cb = function() 
-						SendRPCToServer(RPC.RightClick, ACTIONS.BLINK.code, pos_x, pos_z, mouseover, nil, nil, nil, nil, nil, platform, platform ~= nil)
-					end
-					self.locomotor:PreviewAction(act, true)
-				end)
+				local act = BufferedAction(GLOBAL.ThePlayer, mouseover, ACTIONS.BLINK, invobject, Vector3(pos_x, 0, pos_z))
+				act.preview_cb = function() 
+					SendRPCToServer(RPC.RightClick, ACTIONS.BLINK.code, pos_x, pos_z, mouseover, nil, nil, nil, nil, nil, platform, platform ~= nil)
+				end
+				self.locomotor:PreviewAction(act, true)
 			end
 		else 
 			_DoAction(self, buffaction, ...)
