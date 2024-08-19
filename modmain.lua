@@ -77,6 +77,19 @@ AddComponentPostInit("playercontroller", function(self, inst)
 	end
 end)
 
+-- This fix is needed because of `FORGE_AOE_RCLICK` issue(I assume).
+-- Instant client crash would occur from DoGetMouseActions
+-- local x, y, z = position:Get() (playeractionpicker.lua line 456)
+-- isaoetargeting is true but GetAOETargetingPos returns nil.
+-- I think nil safety needs to be applied on that line by Klei.
+AddComponentPostInit("playeractionpicker", function(self, inst)
+	local _DoGetMouseActions = self.DoGetMouseActions
+	self.DoGetMouseActions = function(self, position, target, ...) 
+		if self.inst.components.playercontroller:IsAOETargeting() and self.inst.components.playercontroller:GetAOETargetingPos() == nil then return end
+		return _DoGetMouseActions(self, position, target, ...)
+	end
+end)
+
 AddPrefabPostInit("orangestaff", function(inst)
 	-- TODO: Controller suppport?
 	-- if inst.components.reticule ~= nil then
@@ -88,5 +101,4 @@ AddPrefabPostInit("orangestaff", function(inst)
     inst.components.aoetargeting.reticule.reticuleprefab = "reticule"
     inst.components.aoetargeting.reticule.ease = true
     inst.components.aoetargeting.reticule.mouseenabled = true
-	inst.components.aoetargeting:SetEnabled(false)
 end) 
