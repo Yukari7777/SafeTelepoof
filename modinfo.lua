@@ -1,6 +1,6 @@
 name = "Safe Telepoof"
-version = "1.1.2"
-description = "Stop wasting your lazy explorer's durability!\n\nWhile holding lazy explorer:\n- Right click + Left Click to telepoof\n- Right Click + Right Click to cancel"
+version = "1.1.2.1"
+description = "Stop wasting your lazy explorer's durability!\n\nWhile holding lazy explorer:\n-  +  to telepoof\n-  +  to cancel"
 author = "Yukari7777"
 api_version = 10
 
@@ -25,6 +25,11 @@ local Keys = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "
 local KeyOptions = {}
 for i = 1, #Keys do KeyOptions[i] = { description = ""..Keys[i].."", data = "KEY_"..Keys[i] } end
 
+local TF = {
+	{ description = "true", data = true }, 
+	{ description = "false", data = false },
+}
+
 server_filter_tags = {
 	"interface",
 	"tweak",
@@ -42,4 +47,18 @@ configuration_options = {
 		options = KeyOptions,
 		default = "KEY_HOME",
 	},
+	{
+		name = "orangestaff",
+		label = "Enable for lazy explorer",
+		hover = "Enable for lazy explorer",
+		options = TF,
+		default = true,
+	},
+	{
+		name = "soulhop",
+		label = "Enable for soul hop",
+		hover = "Enable for soul hop on wortox",
+		options = TF,
+		default = true,
+	}
 }
