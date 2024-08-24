@@ -1,6 +1,6 @@
 name = "Safe Telepoof"
-version = "1.1.2.1"
-description = "Stop wasting your lazy explorer's durability!\n\nWhile holding lazy explorer:\n-  +  to telepoof\n-  +  to cancel"
+version = "1.1.2.2"
+description = "Stop wasting your lazy explorer's durability!\n\nWhile holding lazy explorer:\n-  +  to telepoof\n-  +  to cancel\n\nversion: "..version
 author = "Yukari7777"
 api_version = 10
 
@@ -16,6 +16,15 @@ icon = "modicon.tex"
 
 priority = 0
 
+server_filter_tags = {
+	"interface",
+	"tweak",
+	"orangestaff",
+	"blinkstaff",
+	"telepoof",
+	"reticule"
+}
+
 folder_name = folder_name or ""
 if folder_name:find("SafeTelepoof") then
     name = name.." - local"
@@ -28,15 +37,6 @@ for i = 1, #Keys do KeyOptions[i] = { description = ""..Keys[i].."", data = "KEY
 local TF = {
 	{ description = "true", data = true }, 
 	{ description = "false", data = false },
-}
-
-server_filter_tags = {
-	"interface",
-	"tweak",
-	"orangestaff",
-	"blinkstaff",
-	"telepoof",
-	"reticule"
 }
 
 configuration_options = {

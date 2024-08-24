@@ -7,6 +7,7 @@ local Vector3 = GLOBAL.Vector3
 local EntityScript = GLOBAL.EntityScript
 local TheInput = GLOBAL.TheInput
 local EQUIPSLOTS = GLOBAL.EQUIPSLOTS
+local Prefabs = GLOBAL.Prefabs
 local UpvalueHacker = GLOBAL.require "tools/UpvalueHacker"
 
 STRINGS.ACTIONS.CASTAOE.ORANGESTAFF = STRINGS.ACTIONS.BLINK.GENERIC
@@ -140,21 +141,21 @@ AddComponentPostInit("playeractionpicker", function(self, inst)
 		-- 		print(k, v)
 		-- 	end
 		-- end
-		if actions ~= nil and #actions > 0 and mod_enabled then 
-			local new_actions = {}
-			for k, act in pairs(actions) do
-				if act == ACTIONS.BLINK
-				and ((enabled_orangestaff and useitem ~= nil and useitem.prefab == "orangestaff") 
-					or (enabled_soulhop and useitem == nil and self.inst:HasTag("soulstealer"))) then
-					new_actions[k] = ACTIONS.CASTAOE
-					-- table.insert(new_actions, ACTIONS.CASTAOE)
-				else
-					new_actions[k] = act
-					-- table.insert(new_actions, act)
-				end
-			end
-			actions = new_actions
-		end
+		-- if actions ~= nil and #actions > 0 and mod_enabled then 
+		-- 	local new_actions = {}
+		-- 	for k, act in pairs(actions) do
+		-- 		if act == ACTIONS.BLINK
+		-- 		and ((enabled_orangestaff and useitem ~= nil and useitem.prefab == "orangestaff") 
+		-- 			or (enabled_soulhop and useitem == nil and self.inst:HasTag("soulstealer"))) then
+		-- 			new_actions[k] = ACTIONS.CASTAOE
+		-- 			-- table.insert(new_actions, ACTIONS.CASTAOE)
+		-- 		else
+		-- 			new_actions[k] = act
+		-- 			-- table.insert(new_actions, act)
+		-- 		end
+		-- 	end
+		-- 	actions = new_actions
+		-- end
 		-- print("========================")
 		-- if actions ~= nil and #actions > 0 then
 		-- 	for k, v in pairs(actions[1]) do
@@ -163,9 +164,9 @@ AddComponentPostInit("playeractionpicker", function(self, inst)
 		-- end
 		-- print((actions ~= nil and #actions > 0) and actions[1], target, target ~= nil and target:is_a(EntityScript), target ~= nil and target:is_a(Vector3))
 		ret = _SortActionList(self, actions, target, useitem, ...)
-		for k, v in pairs(ret) do
-			print(k, v)
-		end
+		-- for i, v in ipairs(ret) do
+		-- 	print(i, v)
+		-- end
 		return ret
 	end
 end)
@@ -182,3 +183,15 @@ AddPrefabPostInit("orangestaff", function(inst)
 	inst.components.aoetargeting.reticule.ease = true
 	inst.components.aoetargeting.reticule.mouseenabled = true
 end) 
+
+AddPrefabPostInit("wortox", function(inst)
+	local _GetPointSpecialActions = UpvalueHacker.GetUpvalue(Prefabs.wortox.fn, "common_postinit", "OnSetOwner", "GetPointSpecialActions")
+	local GetPointSpecialActions = function(...)
+		local ret = _GetPointSpecialActions(...)
+		if ret ~= nil and #ret > 0 then
+			ret = { ACTIONS.CASTAOE }
+		end
+		return ret
+	end
+	UpvalueHacker.SetUpvalue(Prefabs.wortox.fn, GetPointSpecialActions, "common_postinit", "OnSetOwner", "GetPointSpecialActions")
+end)
