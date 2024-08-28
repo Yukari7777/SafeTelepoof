@@ -1,5 +1,5 @@
 name = "Safe Telepoof"
-version = "1.1.2.2"
+version = "1.1.3"
 description = "Stop wasting your lazy explorer's durability!\n\nWhile holding lazy explorer:\n-  +  to telepoof\n-  +  to cancel\n\nversion: "..version
 author = "Yukari7777"
 api_version = 10
@@ -47,18 +47,18 @@ configuration_options = {
 		options = KeyOptions,
 		default = "KEY_HOME",
 	},
-	{
-		name = "orangestaff",
-		label = "Enable for lazy explorer",
-		hover = "Enable for lazy explorer",
-		options = TF,
-		default = true,
-	},
-	{
-		name = "soulhop",
-		label = "Enable for soul hop",
-		hover = "Enable for soul hop on wortox",
-		options = TF,
-		default = true,
-	}
+	-- {
+	-- 	name = "orangestaff",
+	-- 	label = "Enable for lazy explorer",
+	-- 	hover = "Enable for lazy explorer",
+	-- 	options = TF,
+	-- 	default = true,
+	-- },
+	-- {
+	-- 	name = "soulhop",
+	-- 	label = "Enable for soul hop",
+	-- 	hover = "Enable for soul hop on wortox",
+	-- 	options = TF,
+	-- 	default = true,
+	-- },
 }

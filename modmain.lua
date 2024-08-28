@@ -16,8 +16,8 @@ STRINGS.ACTIONS.CASTAOE.FREESOUL = STRINGS.ACTIONS.BLINK.FREESOUL
 
 local mod_enabled = true
 local mod_enabled_key = GetModConfigData("enabled_key")
-local enabled_orangestaff = true or GetModConfigData("orangestaff")
-local enabled_soulhop = true or GetModConfigData("soulhop")
+local enabled_orangestaff = GetModConfigData("orangestaff") or true
+local enabled_soulhop = GetModConfigData("soulhop") or true
 TheInput:AddKeyDownHandler(GLOBAL[mod_enabled_key], function()
 	if GLOBAL.ThePlayer ~= nil and GLOBAL.ThePlayer.components.talker ~= nil then 
 		mod_enabled = not mod_enabled
@@ -172,7 +172,6 @@ AddComponentPostInit("playeractionpicker", function(self, inst)
 end)
 
 AddPrefabPostInit("orangestaff", function(inst)
-	-- TODO: Controller suppport?
 	-- if inst.components.reticule ~= nil then
 	-- 	inst.components.reticule.targetfn = nil
 	-- end
@@ -186,10 +185,11 @@ end)
 
 AddPrefabPostInit("wortox", function(inst)
 	local _GetPointSpecialActions = UpvalueHacker.GetUpvalue(Prefabs.wortox.fn, "common_postinit", "OnSetOwner", "GetPointSpecialActions")
-	local GetPointSpecialActions = function(...)
-		local ret = _GetPointSpecialActions(...)
-		if ret ~= nil and #ret > 0 then
-			ret = { ACTIONS.CASTAOE }
+	local GetPointSpecialActions = function(inst, pos, useitem, ...)
+		local equipitem = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+		local ret = _GetPointSpecialActions(inst, pos, useitem, ...)
+		if ret ~= nil and #ret > 0 and equipitem ~= nil and equipitem.prefab == "orangestaff" then
+			ret = {}
 		end
 		return ret
 	end
